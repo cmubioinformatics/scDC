@@ -24,14 +24,10 @@
   return(list(count = tab_count, prop = tab_prop))
 }
 
-.scran_high_var <- function(exprsMat,topn=1000){
+.scran_high_var <- function(exprsMat, topn = 1000) {
   topn <- min(topn, nrow(exprsMat))
-  # var.fit <- scran::fitTrendVar(exprsMat, method="loess")
-  means <- rowMeans(logcounts(sce))
-  vars <- rowVars(logcounts(sce))
-  var.fit <- scran::fitTrendVar(means, vars, lowess=TRUE)
-  var.out <- scran::decomposeVar(exprsMat, var.fit)
-  hvg.out <- var.out[order(var.out$bio, decreasing=TRUE)[1:topn], ]
+  var.out <- scran::modelGeneVar(exprsMat)
+  hvg.out <- var.out[order(var.out$bio, decreasing = TRUE)[1:topn], ]
   return(rownames(hvg.out))
 }
 
